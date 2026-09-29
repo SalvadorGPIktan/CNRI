@@ -42,7 +42,6 @@
     .calendar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.cal{border:1px solid var(--line);border-radius:7px;text-align:center;padding:15px 4px;background:#fbfdff}.cal b{font-size:9px}.cal strong{display:block;font-size:27px;color:#0b7180;margin:10px 0 5px}.cal.red strong{color:var(--red)}.cal small{font-size:8px}
     .budget-content{display:grid;grid-template-columns:155px 1fr;align-items:center}.donut{width:135px;height:135px;border-radius:50%;background:conic-gradient(#278cca 0 35%,#62b55f 35% 67%,#f6c324 67% 83%,#7460b5 83%);display:grid;place-items:center}.donut:after{content:"$14.80 M\A Total";white-space:pre;text-align:center;display:grid;place-items:center;width:78px;height:78px;background:white;border-radius:50%;font-weight:850;line-height:1.5}.budget-list{font-size:9px;display:grid;gap:11px}.budget-list i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}
     .findings{min-height:75px;padding:34px 12px 10px}.finding-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:7px}.finding{text-align:center;font-size:8px;border-right:1px solid #edf0f4;padding:5px}.finding span{display:block;color:#0a7780;font-size:22px;margin-bottom:5px}.footer{display:flex;justify-content:space-between;padding:8px 18px 2px;color:var(--muted);font-size:9px}
-    .source-badge{position:fixed;right:16px;bottom:15px;border-radius:999px;background:#0b1f4a;color:white;padding:8px 13px;font-size:10px;box-shadow:var(--shadow)}
     @media(max-width:1200px){.header{grid-template-columns:180px 1fr 220px}.top,.main-row,.analysis-row,.bottom-row{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.finding-grid{grid-template-columns:repeat(5,1fr)}.map-wrap{min-height:360px}}
     @media(max-width:720px){.app{padding:5px}.header{grid-template-columns:1fr}.brand,.meta{justify-self:center}.title{padding:10px 0}.kpis{grid-template-columns:1fr}.regions{grid-template-columns:repeat(2,1fr)}.finding-grid{grid-template-columns:repeat(2,1fr)}.budget-content{grid-template-columns:1fr;justify-items:center}.calendar-grid{grid-template-columns:repeat(2,1fr)}.legend{display:none}}
 
@@ -182,7 +181,7 @@
 .property-detail,.property-risk-badge,.property-exec-table,.property-back{font-size:11px}
 .property-kpi span,.property-exec-metric span,.property-followup-item span,.property-exec-note{font-size:10px}
 .property-followup-item b{font-size:12px}
-.footer,.source-badge{font-size:10px}
+.footer{font-size:10px}
 
 /* v47 - Escala tipografica uniforme del tablero */
 :root{
@@ -209,7 +208,7 @@ body{font-size:var(--fs-body);line-height:1.4}
 .territorial-ranking-head p,.territorial-ranking-badge,.territorial-filter,.territorial-position,.territorial-level,
 .territorial-card .regional,.territorial-metric span,.territorial-reason,.territorial-analyze,.territorial-ranking-note,
 .inventory-open,.property-context,.property-image-source,.property-kpi span,.property-exec-metric span,
-.property-followup-item span,.property-exec-note,.footer,.source-badge,.filter-note,.map-source{
+.property-followup-item span,.property-exec-note,.footer,.filter-note,.map-source{
   font-size:var(--fs-small)!important;line-height:1.4
 }
 .risk-table,.matrix-table,.priority-table,.comparison-table,.alert-center-table,.inventory-table,
@@ -484,7 +483,6 @@ body{font-size:var(--fs-body);line-height:1.4}
 </section>
   <footer class="footer"><span>Fuente: Consultas de inmuebles, riesgo por entidad, componente y hallazgos</span><span>Prototipo visual para validación funcional</span></footer>
 </div>
-<div id="sourceBadge" class="source-badge">Conectando con servicios...</div>
 
 
 
@@ -619,7 +617,6 @@ function buildLiveDashboard(rojoPayload,amarilloPayload,verdePayload,azulPayload
  return sanitizeDashboardData({metadata:{periodo:'Septiembre 2026',fuentes:['Wongsi/rojo','Wongsi/amarillo','Wongsi/verde','Wongsi/azul'],modo:'servicios REST en línea'},nacional,entidades,inmuebles,regionales,componentes,hallazgos});
 }
 async function loadLiveData(){
- const badge=$('sourceBadge');if(badge)badge.textContent='Consultando servicios Wongsi...';
  try{
    const [rojo,amarillo,verde,azul]=await Promise.all(['rojo','amarillo','verde','azul'].map(fetchJsonService));
    const live=buildLiveDashboard(rojo,amarillo,verde,azul);
@@ -627,7 +624,6 @@ async function loadLiveData(){
    Object.keys(D).forEach(k=>delete D[k]);Object.assign(D,live);
    if(S.key&&!D.entidades.some(e=>e.clave===S.key))S.key=null;
    const now=new Date();text('lastUpdated',now.toLocaleString('es-MX'));
-   if(badge)badge.textContent='Datos en línea · servicios Wongsi';
    populateFollowupEntitySelect();populateInventoryEntitySelect();render();
  }catch(error){
    console.error('No se pudieron cargar los servicios Wongsi:',error);
